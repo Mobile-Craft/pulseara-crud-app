@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-// import { API, graphqlOperation } from 'aws-amplify'
-import { createProcedimiento, deleteProcedimiento } from './graphql/mutations';
+import { graphqlOperation } from '@aws-amplify/api-graphql';
+import { generateClient } from '@aws-amplify/api';
+import { createProcedimiento, deleteProcedimiento, updateProcedimiento } from './graphql/mutations';
 import { listProcedimientos } from './graphql/queries';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
-import { generateClient } from "aws-amplify/api";
-import { graphqlOperation } from '@aws-amplify/api-graphql';
 
 const client = generateClient();
 
 interface Procedimiento {
-  id: string;
+  id?: string;
   procedimiento: string;
   codigo: number;
   reclamo: number;
@@ -19,7 +18,7 @@ interface Procedimiento {
   autorizadoRD: number;
 }
 
-const initialState = {
+const initialState: Procedimiento = {
   procedimiento: '',
   codigo: 0,
   reclamo: 0,
@@ -29,7 +28,8 @@ const initialState = {
 
 function App() {
   const [procedimientos, setProcedimientos] = useState<Procedimiento[]>([]);
-  const [formState, setFormState] = useState<Omit<Procedimiento, 'id'>>(initialState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedProcedimientos, setEditedProcedimientos] = useState<Procedimiento[]>([]);
 
   useEffect(() => {
     fetchProcedimientos();
@@ -40,31 +40,59 @@ function App() {
       const procedimientoData = await client.graphql(graphqlOperation(listProcedimientos));
       const items = (procedimientoData as any).data.listProcedimientos.items as Procedimiento[];
       setProcedimientos(items);
+      setEditedProcedimientos(items);
     } catch (err) {
       console.log('Error fetching procedimientos:', err);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormState({ ...formState, [name]: value });
+  const openModal = () => {
+    setIsModalOpen(true);
   };
 
-  const addProcedimiento = async () => {
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const { name, value } = e.target;
+    const updatedProcedimientos = [...editedProcedimientos];
+    updatedProcedimientos[index] = { ...updatedProcedimientos[index], [name]: value };
+    setEditedProcedimientos(updatedProcedimientos);
+  };
+
+  const addEmptyProcedimiento = () => {
+    setEditedProcedimientos([...editedProcedimientos, { ...initialState }]);
+  };
+
+  const saveChanges = async () => {
     try {
-      if (!formState.procedimiento || !formState.codigo) return;
-      const procedimiento: Omit<Procedimiento, 'id'> = { ...formState };
-      const newProcedimiento = await client.graphql(graphqlOperation(createProcedimiento, { input: procedimiento }));
-      setProcedimientos([...procedimientos, (newProcedimiento as any).data.createProcedimiento]);
-      setFormState(initialState);
+      for (const procedimiento of editedProcedimientos) {
+        const { id, procedimiento: proc, codigo, reclamo, diferenciaRD, autorizadoRD } = procedimiento;
+
+        if (id) {
+          const updateData = { id, procedimiento: proc, codigo, reclamo, diferenciaRD, autorizadoRD };
+          await client.graphql(graphqlOperation(updateProcedimiento, { input: updateData }));
+        } else {
+          const newProcedimiento = await client.graphql(graphqlOperation(createProcedimiento, { input: procedimiento }));
+          procedimiento.id = (newProcedimiento as any).data.createProcedimiento.id;
+        }
+      }
+      setProcedimientos(editedProcedimientos);
+      closeModal();
     } catch (err) {
-      console.log('Error creating procedimiento:', err);
+      console.log('Error saving changes:', err);
     }
   };
 
-  const removeProcedimiento = async (id: string) => {
+  const removeProcedimiento = async (id?: string, index?: number) => {
     try {
-      await client.graphql(graphqlOperation(deleteProcedimiento, { input: { id } }));
+      if (id) {
+        await client.graphql(graphqlOperation(deleteProcedimiento, { input: { id } }));
+      }
+      const updatedProcedimientos = [...editedProcedimientos];
+      updatedProcedimientos.splice(index!, 1);
+      setEditedProcedimientos(updatedProcedimientos);
       setProcedimientos(procedimientos.filter((p) => p.id !== id));
     } catch (err) {
       console.log('Error deleting procedimiento:', err);
@@ -83,24 +111,67 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <div style={{ padding: 20 }}>
-          <h2>Procedimientos</h2>
-          <input placeholder="Procedimiento" name="procedimiento" value={formState.procedimiento} onChange={handleChange} />
-          <input placeholder="Código" name="codigo" value={formState.codigo} onChange={handleChange} type="number" />
-          <input placeholder="Reclamo" name="reclamo" value={formState.reclamo} onChange={handleChange} type="number" />
-          <input placeholder="Diferencia RD$" name="diferenciaRD" value={formState.diferenciaRD} onChange={handleChange} type="number" />
-          <input placeholder="Autorizado RD$" name="autorizadoRD" value={formState.autorizadoRD} onChange={handleChange} type="number" />
-          <button onClick={addProcedimiento}>Agregar Procedimiento</button>
-          <div>
-            {procedimientos.map((p) => (
-              <div key={p.id}>
-                <p>{p.procedimiento} - Código: {p.codigo} - Reclamo: {p.reclamo} - Diferencia RD$: {p.diferenciaRD} - Autorizado RD$: {p.autorizadoRD}</p>
-                <button onClick={() => removeProcedimiento(p.id)}>Eliminar</button>
-              </div>
-            ))}
-          </div>
+        <button onClick={openModal}>Editar Procesos</button>
+        <div>
+          {procedimientos.map((p) => (
+            <div key={p.id}>
+              <p>{p.procedimiento} - Código: {p.codigo} - Reclamo: {p.reclamo} - Diferencia RD$: {p.diferenciaRD} - Autorizado RD$: {p.autorizadoRD}</p>
+            </div>
+          ))}
         </div>
       </div>
+
+      {/* Modal de Edición */}
+      {isModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Editar Procedimientos</h2>
+            {editedProcedimientos.map((p, index) => (
+              <div key={index} className="edit-item">
+                <input
+                  placeholder="Procedimiento"
+                  name="procedimiento"
+                  value={p.procedimiento}
+                  onChange={(e) => handleEditChange(e, index)}
+                />
+                <input
+                  placeholder="Código"
+                  name="codigo"
+                  value={p.codigo}
+                  onChange={(e) => handleEditChange(e, index)}
+                  type="number"
+                />
+                <input
+                  placeholder="Reclamo"
+                  name="reclamo"
+                  value={p.reclamo}
+                  onChange={(e) => handleEditChange(e, index)}
+                  type="number"
+                />
+                <input
+                  placeholder="Diferencia RD$"
+                  name="diferenciaRD"
+                  value={p.diferenciaRD}
+                  onChange={(e) => handleEditChange(e, index)}
+                  type="number"
+                />
+                <input
+                  placeholder="Autorizado RD$"
+                  name="autorizadoRD"
+                  value={p.autorizadoRD}
+                  onChange={(e) => handleEditChange(e, index)}
+                  type="number"
+                />
+                <button onClick={() => removeProcedimiento(p.id, index)}>Eliminar</button>
+              </div>
+            ))}
+            <button onClick={addEmptyProcedimiento}>Agregar Procedimiento</button>
+            <button onClick={saveChanges}>Guardar Cambios</button>
+            <button onClick={closeModal}>Cerrar</button>
+          </div>
+        </div>
+      )}
+
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
