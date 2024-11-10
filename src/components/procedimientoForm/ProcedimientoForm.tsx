@@ -24,6 +24,7 @@ interface ProcedimientoFormProps {
   onClose: () => void;
 }
 
+
 const emptyForm = {
   procedimiento: "",
   codigo: "",
