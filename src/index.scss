@@ -1,0 +1,14 @@
+@import "./components/imports.scss";
+@import './assets/scss/buttons.scss';
+@import './assets/scss/variables.scss';
+@import './pages/imports.scss';
+
+body {
+  background-color: $background;
+  padding: 10px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}

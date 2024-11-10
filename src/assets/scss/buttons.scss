@@ -1,0 +1,28 @@
+.primary-button {
+  background-color: $blue;
+  display: flex;
+  height: 32px;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  color: #FFF;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  font-family: 'Raleway';
+  
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: 2px solid $border-button;
+  border-radius: 5px;
+  padding: 10px 12px;
+  color: $dark-gray;
+  font-weight: bold;
+  width: 138px;
+}

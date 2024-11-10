@@ -1,11 +1,51 @@
-# React + TypeScript + Vite
+# Pulseara CRUD App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Esta es una aplicación CRUD para la gestión de procedimientos, construida con **React + TypeScript** usando **Vite** como bundler y **AWS Amplify** como backend, con **AppSync** para la API GraphQL. La aplicación incluye características para crear, leer, actualizar y eliminar procedimientos.
 
-Currently, two official plugins are available:
+## Tabla de Contenidos
+- [Características](#características)
+- [Requisitos Previos](#requisitos-previos)
+- [Instalación](#instalación)
+- [Configuración de AWS Amplify](#configuración-de-aws-amplify)
+- [Ejecutar el Proyecto](#ejecutar-el-proyecto)
+- [Configuración Avanzada de ESLint](#configuración-avanzada-de-eslint)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Comandos Disponibles](#comandos-disponibles)
+- [Contribuir](#contribuir)
+- [Licencia](#licencia)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Características
+
+- **CRUD Completo**: Operaciones de creación, lectura, actualización y eliminación de procedimientos.
+- **Modal de Edición**: Edita múltiples registros en un modal, con la opción de agregar y marcar para eliminación.
+- **AWS Amplify y AppSync**: Utiliza GraphQL para manejar el backend de forma escalable y eficiente.
+- **React + TypeScript + Vite**: Configuración rápida con Hot Module Replacement (HMR) y un conjunto de reglas básicas de ESLint.
+
+## Requisitos Previos
+
+Antes de comenzar, asegúrate de tener lo siguiente instalado en tu sistema:
+
+- **Node.js** (v14 o superior)
+- **npm** (v6 o superior)
+- **AWS CLI** configurado en tu entorno con las credenciales necesarias
+- **Amplify CLI** configurado para tu usuario
+
+Para instalar el Amplify CLI:
+
+```bash
+npm install -g @aws-amplify/cli
+
+
+  ## Instalacion
+Clona el repositorio:
+https://github.com/Mobile-Craft/pulseara-crud-app.git
+
+  ## Instala las dependencias:
+  npm install
+
+ ## Ejecutar el Proyecto
+  npm run dev
+
 
 ## Expanding the ESLint configuration
 

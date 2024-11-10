@@ -1,0 +1,50 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1rem;
+    text-align: left;
+  
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+    }
+  
+    thead {
+      background-color: #f4f4f4;
+      font-weight: bold;
+  
+      th {
+        color: #333;
+      }
+    }
+  
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background-color: #f9f9f9;
+        }
+  
+        &:hover {
+          background-color: #e8f5e9;
+        }
+      }
+    }
+  
+    // Botón de acción en la columna "Acciones"
+    button {
+      background-color: #07B284; 
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: darken(#07B284, 10%);
+      }
+    }
+  }
+  
