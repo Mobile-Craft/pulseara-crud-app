@@ -13,9 +13,16 @@
     "@aws-amplify/api": "^6.1.1",
     "@aws-amplify/api-graphql": "^4.5.1",
     "@aws-amplify/ui-react": "^6.5.5",
+    "@hookform/resolvers": "^3.9.1",
+    "@tanstack/react-query": "^5.59.20",
     "aws-amplify": "^6.8.0",
+    "formik": "^2.4.6",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.28.0",
+    "sass": "^1.80.6",
+    "sweetalert2": "^11.14.5",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
