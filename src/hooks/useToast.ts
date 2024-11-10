@@ -21,9 +21,9 @@ const useToast = () => {
 			timer: 2000,
 			position: 'bottom-right',
 			toast: true,
-            timerProgressBar: false,
-            background:'#306495',
-            color: '#fff'
+			timerProgressBar: false,
+			background: '#306495',
+			color: '#fff'
 		});
 	};
 

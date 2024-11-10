@@ -18,6 +18,8 @@ import trashCan from "../../assets/trashCan.svg";
 import useToast from "../../hooks/useToast";
 import { Procedimiento } from "../../models/Procedimiento.model";
 import plusIcon from '../../assets/plus.svg';
+import checkIcon from '../../assets/check.svg';
+import { formatIndex } from "../../helpers/fotmatIndex";
 interface ProcedimientoFormProps {
   fetchProcedimientos: () => Promise<void>;
   procedimientos: Procedimiento[];
@@ -155,7 +157,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
             (newProcedimiento as any).data.createProcedimiento.id ?? null;
         }
       }
-      successToast("Procedimiento/s agregado/s exitósamente");
+      successToast("Procedimiento agregado");
       fetchProcedimientos();
       onClose();
     } catch (err: any) {
@@ -167,7 +169,9 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
     <div className="form-wrapper">
       <div className="top-content">
         <h2>Procedimientos</h2>
-        <button onClick={agregarFormulario}> <img src={plusIcon} alt="Plus" />Añadir procedimiento</button>
+        <div className="centerBotton">
+          <button onClick={agregarFormulario}> <img src={plusIcon} alt="PlusIcon" className="plusIcon" />Añadir procedimiento</button>
+        </div>
       </div>
 
       {formularios.map((formulario, index) => (
@@ -195,7 +199,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 <img src={trashCan} alt="Trash" />
               </button>
               <div className="form-input">
-                <label>Procedimiento</label>
+                <label>Procedimiento {formatIndex(index)}</label>
                 <Field
                   name="procedimiento"
                   placeholder="Ej: 4563523"
@@ -220,7 +224,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 <ErrorMessage name="codigo" component="p" />
               </div>
               <div className="form-input">
-                <label>Reclamado</label>
+                <label>Reclamado RD$</label>
                 <Field
                   name="reclamo"
                   placeholder="Ej: 4563523"
@@ -236,7 +240,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 />
               </div>
               <div className="form-input">
-                <label>Diferencia $RD</label>
+                <label>Diferencia RD$</label>
                 <Field
                   name="diferenciaRD"
                   placeholder="Ej: 4563523"
@@ -253,7 +257,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 />
               </div>
               <div className="form-input">
-                <label>Autorizado $RD</label>
+                <label>Autorizado RD$</label>
                 <Field
                   name="autorizadoRD"
                   placeholder="Ej: 4563523"
@@ -282,6 +286,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
           className="primary-button"
           type="button"
           onClick={handleSubmitAll}>
+          <img src={checkIcon} alt="Plus" className="CheckIcon" />
           Guardar cambios
         </button>
       </div>

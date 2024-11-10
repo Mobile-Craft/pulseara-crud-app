@@ -8,7 +8,7 @@ import { listProcedimientos } from "../../graphql/queries";
 import useToast from "../../hooks/useToast";
 import { Procedimiento } from "../../models/Procedimiento.model";
 import pencilIcon from "../../assets/pencil.svg";
-
+import noDataIcon from "../../assets/noData.svg"
 const client = generateClient();
 
 const ProcedimientoManager: React.FC = () => {
@@ -41,10 +41,24 @@ const ProcedimientoManager: React.FC = () => {
         fetchProcedimientos={fetchProcedimientos}
         procedimientos={procedimientos}
       />
-      <ProcedimientosList procedimientos={procedimientos} />
-      <button className="primary-button edit" onClick={() => setModalOpen(true)}>
-        <img src={pencilIcon} alt="Pencil" width={13} height={13} /> Editar procedimientos
-      </button>
+      {procedimientos.length === 0 ? (
+        <div className="no-data-container">
+          <div className="no-data-message">
+            <img src={noDataIcon} alt="No data icon" className="no-data-icon" />
+            <p>No hay datos que mostrar</p>
+          </div>
+          <button className="primary-button edit" onClick={() => setModalOpen(true)}>
+            <img src={pencilIcon} alt="Pencil" width={13} height={13} /> Editar procedimientos
+          </button>
+        </div>
+      ) : (
+        <>
+          <ProcedimientosList procedimientos={procedimientos} />
+          <button className="primary-button edit" onClick={() => setModalOpen(true)}>
+            <img src={pencilIcon} alt="Pencil" width={13} height={13} /> Editar procedimientos
+          </button>
+        </>
+      )}
     </div>
   );
 };

@@ -11,7 +11,7 @@ const ProcedimientosList: React.FC<ProcedimientoListProps> = ({
 }) => (
   <div className="procedimientos-list">
     {procedimientos?.map((procedimiento, index) => (
-      <ProcedimientoCard key={index} procedimiento={procedimiento} />
+      <ProcedimientoCard index={index} key={index} procedimiento={procedimiento} />
     ))}
   </div>
 );

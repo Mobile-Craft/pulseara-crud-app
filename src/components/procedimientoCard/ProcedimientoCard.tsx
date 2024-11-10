@@ -1,16 +1,20 @@
+import { formatIndex } from "../../helpers/fotmatIndex";
 import { Procedimiento } from "../../models/Procedimiento.model";
 
 interface ProcedimientoCardProps {
   procedimiento: Procedimiento;
+  index: number
+
 }
 
 const ProcedimientoCard: React.FC<ProcedimientoCardProps> = ({
   procedimiento,
+  index
 }) => {
   return (
     <div key={procedimiento.id} className="procedimiento-card">
       <div className="card-item">
-        <span className="label">Procedimiento</span>
+        <span className="label">Procedimiento {formatIndex(index)}</span>
         <span className="value">{procedimiento.procedimiento}</span>
       </div>
       <div className="card-item">
