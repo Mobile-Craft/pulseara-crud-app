@@ -23,16 +23,20 @@ const useToast = () => {
 			toast: true,
 			timerProgressBar: false,
 			background: '#306495',
-			color: '#fff'
+			color: '#fff',
 		});
 	};
 
 	const warningToast = (title?: string, text?: string) => {
 		return toastMixin.fire({
-			title: title ?? 'Advertencia',
+			title: title ?? 'Uy, algo salió mal, intenta de nuevo más tarde',
 			text: text ?? '',
 			position: 'bottom-right',
 			toast: true,
+			timer: 2000,
+			background: '#f0ad4e',
+			timerProgressBar: false,
+			color: '#fff'
 		});
 	};
 
@@ -42,7 +46,11 @@ const useToast = () => {
 			text: text ?? '',
 			position: 'bottom-right',
 			toast: true,
+			timer: 2000,
+			background: '#bb2124',
 			timerProgressBar: false,
+			color: '#fff'
+
 		});
 	};
 

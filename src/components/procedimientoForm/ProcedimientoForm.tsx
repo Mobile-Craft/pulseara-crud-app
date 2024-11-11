@@ -20,12 +20,12 @@ import { Procedimiento } from "../../models/Procedimiento.model";
 import plusIcon from '../../assets/plus.svg';
 import checkIcon from '../../assets/check.svg';
 import { formatIndex } from "../../helpers/fotmatIndex";
+
 interface ProcedimientoFormProps {
   fetchProcedimientos: () => Promise<void>;
   procedimientos: Procedimiento[];
   onClose: () => void;
 }
-
 
 const emptyForm = {
   procedimiento: "",
@@ -53,7 +53,8 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
   const [formularios, setFormularios] = useState(
     procedimientos.length ? [] : [emptyForm]
   );
-  const { successToast, errorToast } = useToast();
+  const [markedForDeletion, setMarkedForDeletion] = useState<string[]>([]);
+  const { successToast, errorToast, warningToast } = useToast();
 
   useEffect(() => {
     if (procedimientos.length) {
@@ -83,17 +84,11 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
     setFormularios([...formularios, emptyForm]);
   };
 
-  const removeProcedimiento = async (id: string, index: number) => {
-    try {
-      await client.graphql(
-        graphqlOperation(deleteProcedimiento, { input: { id } })
-      );
-      eliminarFormularioState(index);
-      fetchProcedimientos();
-      successToast("Procedimiento eliminado exitósamente");
-    } catch (err: any) {
-      errorToast(err.data);
+  const markForDeletion = (id: string, index: number) => {
+    if (id) {
+      setMarkedForDeletion([...markedForDeletion, id]);
     }
+    eliminarFormularioState(index);
   };
 
   const eliminarFormularioState = (index: number) => {
@@ -101,8 +96,6 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
       prevFormularios.filter((_, i) => i !== index)
     );
   };
-
-  console.log(formularios);
 
   const handleInputChange = (index: number, field: string, value: string) => {
     const nuevosFormularios = [...formularios];
@@ -123,7 +116,31 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
   }
 
   const handleSubmitAll = async () => {
+    const hasModifiedChanges = formularios.some((formulario, index) => {
+      const initialForm = procedimientos[index];
+      return (
+        formulario.procedimiento !== initialForm?.procedimiento ||
+        formulario.codigo !== String(initialForm?.codigo) ||
+        formulario.reclamo !== String(initialForm?.reclamo) ||
+        formulario.diferenciaRD !== String(initialForm?.diferenciaRD) ||
+        formulario.autorizadoRD !== String(initialForm?.autorizadoRD)
+      );
+    });
+
+    const hasAddedOrRemovedItems = formularios.length !== procedimientos.length || markedForDeletion.length > 0;
+
+    if (!hasModifiedChanges && !hasAddedOrRemovedItems) {
+      warningToast("No hay cambios para guardar");
+      return;
+    }
+
     try {
+      for (const id of markedForDeletion) {
+        await client.graphql(
+          graphqlOperation(deleteProcedimiento, { input: { id } })
+        );
+      }
+
       for (const procedimiento of formularios) {
         const {
           id,
@@ -133,6 +150,11 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
           diferenciaRD,
           autorizadoRD,
         } = procedimiento;
+
+        if (!proc || !codigo || !reclamo || !diferenciaRD || !autorizadoRD) {
+          errorToast("Todos los campos son obligatorios");
+          return;
+        }
 
         if (id) {
           const updateData = {
@@ -157,6 +179,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
             (newProcedimiento as any).data.createProcedimiento.id ?? null;
         }
       }
+
       successToast("Procedimiento agregado");
       fetchProcedimientos();
       onClose();
@@ -170,7 +193,9 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
       <div className="top-content">
         <h2>Procedimientos</h2>
         <div className="centerBotton">
-          <button onClick={agregarFormulario}> <img src={plusIcon} alt="PlusIcon" className="plusIcon" />Añadir procedimiento</button>
+          <button onClick={agregarFormulario}>
+            <img src={plusIcon} alt="PlusIcon" className="plusIcon" />Añadir procedimiento
+          </button>
         </div>
       </div>
 
@@ -183,23 +208,19 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
             const nuevosFormularios = [...formularios];
             nuevosFormularios[index] = values;
             setFormularios(nuevosFormularios);
-          }}>
+          }}
+        >
           {({ handleSubmit, setFieldValue }) => (
             <Form onSubmit={handleSubmit} className="procedimiento-form">
               <button
+                type="button"
                 className="delete"
-                onClick={() => {
-                  const id = formularios[index].id;
-                  if (id) {
-                    removeProcedimiento(id, index);
-                  } else {
-                    eliminarFormularioState(index);
-                  }
-                }}>
+                onClick={() => markForDeletion(formularios[index].id, index)}
+              >
                 <img src={trashCan} alt="Trash" />
               </button>
               <div className="form-input">
-                <label>Procedimiento {formatIndex(index)}</label>
+                <label className="title-procedimiento">Procedimiento {formatIndex(index)}</label>
                 <Field
                   name="procedimiento"
                   placeholder="Ej: 4563523"
@@ -211,7 +232,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 <ErrorMessage name="procedimiento" component="p" />
               </div>
               <div className="form-input">
-                <label>Código</label>
+                <label className="title-from">Código</label>
                 <Field
                   name="codigo"
                   placeholder="Ej: 4563523"
@@ -224,7 +245,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 <ErrorMessage name="codigo" component="p" />
               </div>
               <div className="form-input">
-                <label>Reclamado RD$</label>
+                <label className="title-from">Reclamado RD$</label>
                 <Field
                   name="reclamo"
                   placeholder="Ej: 4563523"
@@ -240,7 +261,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 />
               </div>
               <div className="form-input">
-                <label>Diferencia RD$</label>
+                <label className="title-from">Diferencia RD$</label>
                 <Field
                   name="diferenciaRD"
                   placeholder="Ej: 4563523"
@@ -257,7 +278,7 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
                 />
               </div>
               <div className="form-input">
-                <label>Autorizado RD$</label>
+                <label className="title-from">Autorizado RD$</label>
                 <Field
                   name="autorizadoRD"
                   placeholder="Ej: 4563523"
@@ -285,7 +306,8 @@ const ProcedimientoForm: React.FC<ProcedimientoFormProps> = ({
         <button
           className="primary-button"
           type="button"
-          onClick={handleSubmitAll}>
+          onClick={handleSubmitAll}
+        >
           <img src={checkIcon} alt="Plus" className="CheckIcon" />
           Guardar cambios
         </button>

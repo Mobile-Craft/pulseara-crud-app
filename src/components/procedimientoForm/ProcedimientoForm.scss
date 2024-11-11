@@ -101,7 +101,14 @@
     .m-left {
       margin-left: 20px;
     }
-    label{
+    .title-procedimiento {
+      font-family: "Open Sans";
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      color: $black;
+    }
+    .title-from {
       font-family: "Open Sans";
       font-size: 16px;
       font-style: normal;
@@ -146,13 +153,18 @@
     padding:10px ;
     border-radius: 8px;
     box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1); 
-    
+    .title-procedimiento{
+      font-size: 18px;
+      font-weight: bold;
+      
+    }
     .form-input {
       width: 100%;
       display: flex;
       flex-direction: column;
+
       
-      label {
+      .title-from {
         font-size: 14px;
         text-align: left;
       }
