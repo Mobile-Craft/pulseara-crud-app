@@ -26,6 +26,7 @@ const ProcedimientoManager: React.FC = () => {
       );
       const items = (procedimientoData as any).data.listProcedimientos
         .items as Procedimiento[];
+      items.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
       setProcedimientos(items);
     } catch (err: any) {
       errorToast(err.data);

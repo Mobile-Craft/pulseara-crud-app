@@ -1,5 +1,6 @@
 import { formatIndex } from "../../helpers/fotmatIndex";
 import { Procedimiento } from "../../models/Procedimiento.model";
+import { formatearConMiles } from '../../helpers/procedimientoHelper';
 
 interface ProcedimientoCardProps {
   procedimiento: Procedimiento;
@@ -23,15 +24,15 @@ const ProcedimientoCard: React.FC<ProcedimientoCardProps> = ({
       </div>
       <div className="card-item">
         <span className="label">Reclamado</span>
-        <span className="value">RD$ {procedimiento.reclamo}</span>
+        <span className="value">RD$ {formatearConMiles(procedimiento.reclamo)}</span>
       </div>
       <div className="card-item">
         <span className="label">Diferencia RD$</span>
-        <span className="value">RD$ {procedimiento.diferenciaRD}</span>
+        <span className="value">RD$ {formatearConMiles(procedimiento.diferenciaRD)}</span>
       </div>
       <div className="card-item">
         <span className="label">Autorizado RD$</span>
-        <span className="value">RD$ {procedimiento.autorizadoRD}</span>
+        <span className="value">RD$ {formatearConMiles(procedimiento.autorizadoRD)}</span>
       </div>
     </div>
   );

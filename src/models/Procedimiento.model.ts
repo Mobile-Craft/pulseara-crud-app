@@ -5,4 +5,5 @@ export interface Procedimiento {
   reclamo: number;
   diferenciaRD: number;
   autorizadoRD: number;
+  createdAt: string;
 }

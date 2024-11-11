@@ -1,46 +1,131 @@
-.procedimientos{
-    padding: 4rem;
-    .title{
-        font-size: 25px;
-        font-weight: 600;
-        font-family: 'Raleway';
-        margin-bottom: 35px;
+.procedimientos {
+  padding: 4rem;
+
+  .title {
+    font-size: 25px;
+    font-weight: 600;
+    font-family: 'Raleway';
+    margin-bottom: 35px;
+  }
+
+  .edit {
+    margin-top: 35px;
+  }
+
+  .no-data-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    text-align: center;
+
+    .no-data-message {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 18px;
+      color: #555;
+
+      .no-data-icon {
+        margin-bottom: 20px;
+      }
+
+      p {
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 400;
+        letter-spacing: 0.15px;
+      }
     }
-    .edit{
-        margin-top: 35px;
+
+    .edit {
+      margin-top: 10px; 
+      padding: 10px 20px;
+      font-size: 16px;
     }
+  }
+
+  /* Responsive Styles */
+
+  /* Tablets */
+  @media (max-width: 768px) {
+    padding: 2rem;
+
+    .title {
+      font-size: 25px;
+      margin-bottom: 25px;
+    }
+
     .no-data-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 60vh;
-        text-align: center;
-        
-        .no-data-message {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          font-size: 18px;
-          color: #555;
-          
-          .no-data-icon {
-            margin-bottom: 20px;
-          }
-    
-          p {
-            font-family: Roboto;
-            font-size: 16px;
-            font-weight: 400;
-            letter-spacing: 0.15px;
-          }
-        }
-        
-        .edit {
-          margin-top: 10px; 
-          padding: 10px 20px;
-          font-size: 16px;
+      height: 50vh;
+
+      .no-data-message {
+        font-size: 16px;
+
+        p {
+          font-size: 14px;
         }
       }
-    
+
+      .edit {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    padding: 1rem;
+
+    .title {
+      // font-size: 20px;
+      // text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .no-data-container {
+      height: 40vh;
+
+      .no-data-message {
+        font-size: 14px;
+
+        .no-data-icon {
+          width: 100px; 
+        }
+
+        p {
+          font-size: 12px;
+        }
+      }
+
+      .edit {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+    }
+
+    .procedimiento-card {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      align-items: stretch ;
+
+      .card-item {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        font-size: 14px;
+        padding: 8px;
+        .value {
+          font-weight: 600;
+          padding-top: 0px;
+        }
+      }
+    }
+  }
 }
