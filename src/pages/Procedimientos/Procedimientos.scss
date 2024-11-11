@@ -25,10 +25,10 @@
       flex-direction: column;
       align-items: center;
       font-size: 18px;
-      color: #555;
+      color: $black;
 
       .no-data-icon {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
       }
 
       p {
@@ -42,7 +42,10 @@
     .edit {
       margin-top: 10px; 
       padding: 10px 20px;
-      font-size: 16px;
+      font-family: 'Raleway';
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 700;
     }
   }
 
