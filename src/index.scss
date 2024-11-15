@@ -3,6 +3,9 @@
 @import './assets/scss/variables.scss';
 @import './pages/imports.scss';
 
+.appLayout{
+    padding: 4rem;
+}
 body {
   background-color: $background;
   padding: 10px;

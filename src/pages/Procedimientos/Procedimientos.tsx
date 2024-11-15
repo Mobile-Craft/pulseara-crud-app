@@ -7,13 +7,15 @@ import ProcedimientosList from "../../components/procedimientosList/Procedimient
 import { listProcedimientos } from "../../graphql/queries";
 import useToast from "../../hooks/useToast";
 import { Procedimiento } from "../../models/Procedimiento.model";
-import pencilIcon from "../../assets/pencil.svg";
 import noDataIcon from "../../assets/noData.svg"
+import ButtonComponent from "../../components/buttonComponent/ButtomComponent";
+import CircularProgress from '@mui/material/CircularProgress';
 const client = generateClient();
 
 const ProcedimientoManager: React.FC = () => {
   const [procedimientos, setProcedimientos] = useState<Procedimiento[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { errorToast } = useToast();
   useEffect(() => {
     fetchProcedimientos();
@@ -21,6 +23,7 @@ const ProcedimientoManager: React.FC = () => {
 
   const fetchProcedimientos = async () => {
     try {
+      setIsLoading(true);
       const procedimientoData = await client.graphql(
         graphqlOperation(listProcedimientos)
       );
@@ -30,34 +33,36 @@ const ProcedimientoManager: React.FC = () => {
       setProcedimientos(items);
     } catch (err: any) {
       errorToast(err.data);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="procedimientos">
-      <h1 className="title">Procedimientos</h1>
       <ProcedimientoModal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         fetchProcedimientos={fetchProcedimientos}
         procedimientos={procedimientos}
       />
-      {procedimientos.length === 0 ? (
+
+      {isLoading ? (
+        <div className="no-data-container">
+          <CircularProgress />
+        </div>
+      ) : procedimientos.length === 0 ? (
         <div className="no-data-container">
           <div className="no-data-message">
             <img src={noDataIcon} alt="No data icon" className="no-data-icon" />
             <p>No hay datos que mostrar</p>
           </div>
-          <button className="primary-button edit" onClick={() => setModalOpen(true)}>
-            <img src={pencilIcon} alt="Pencil" width={13} height={13} /> Editar procedimientos
-          </button>
+          <ButtonComponent onClick={() => setModalOpen(true)} />
         </div>
       ) : (
         <>
           <ProcedimientosList procedimientos={procedimientos} />
-          <button className="primary-button edit" onClick={() => setModalOpen(true)}>
-            <img src={pencilIcon} alt="Pencil" width={13} height={13} /> Editar procedimientos
-          </button>
+          <ButtonComponent onClick={() => setModalOpen(true)} />
         </>
       )}
     </div>

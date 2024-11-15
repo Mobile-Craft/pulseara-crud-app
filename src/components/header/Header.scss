@@ -1,0 +1,20 @@
+@import '../../assets/scss/variables.scss';
+.header{
+    display: flex;
+    gap: 30px;
+    flex-direction: row;
+    a{text-decoration: none;}
+    .title {
+        font-size: 25px;
+        font-weight: 600;
+        font-family: 'Raleway';
+        margin-bottom: 35px;
+        color: $grayMenu ;
+    }
+    .title.active{
+
+        color: $black ;
+
+
+    }
+}

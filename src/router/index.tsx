@@ -1,15 +1,16 @@
 import React from 'react';
 import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import Procedimientos from '../pages/Procedimientos/Procedimientos';
+import EstudiosManager from '../pages/Estudios/Estudios';
+
 
 const AppRouter: React.FC = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/procedimientos" replace />} />
-        <Route path="/procedimientos" element={<Procedimientos />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route path="/" element={<Navigate to="/procedimientos" replace />} />
+      <Route path="/procedimientos" element={<Procedimientos />} />
+      <Route path="/estudios" element={<EstudiosManager />} />
+    </Routes>
   );
 };
 
