@@ -11,7 +11,7 @@ const EstudiosList: React.FC<EstudiosListProps> = ({
 }) => (
     <div className="procedimientos-list">
         {estudios?.map((estudio, index) => (
-            <EstudioCard index={index} key={index} estudio={estudio} />
+            <EstudioCard key={index} estudio={estudio} />
         ))}
     </div>
 );

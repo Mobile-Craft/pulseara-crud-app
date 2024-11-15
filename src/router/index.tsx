@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Procedimientos from '../pages/Procedimientos/Procedimientos';
 import EstudiosManager from '../pages/Estudios/Estudios';
 

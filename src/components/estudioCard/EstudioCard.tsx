@@ -3,13 +3,11 @@ import { Estudio } from "../../models/Estudio.model";
 
 interface EstudioCardProps {
     estudio: Estudio;
-    index: number
 
 }
 
 const EstudioCard: React.FC<EstudioCardProps> = ({
     estudio,
-    index
 }) => {
     return (
         <div key={estudio.id} className="procedimiento-card estudio-card">
